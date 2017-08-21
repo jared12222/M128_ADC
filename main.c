@@ -27,7 +27,9 @@ int main(int argc, char const *argv[]) {
       if(check)
         printf("check:%d\n",check);
     }
-    M128_ADC_get(100,2,&buff);
+    check = M128_ADC_get(100,2,&buff);
+    if(check)
+      printf("check:%d\n",check);
     printf("Re:%X\n",buff);
   }
 }
