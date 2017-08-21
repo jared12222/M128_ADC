@@ -42,7 +42,9 @@ char M128_ADC_set(char LSByte, char Mask, char Shift, char Data)
   }
   return 0;
 }
-
+/**
+  For ADC result
+*/
 char M128_ADC_get(char LSByte, char Bytes, void *Data_p)
 {
   volatile uint8_t *reg[2] = {&ADCL,&ADCH};
