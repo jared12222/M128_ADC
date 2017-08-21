@@ -60,9 +60,29 @@ char M128_ADC_get(char LSByte, char Bytes, void *Data_p)
 
 char M128_ADC_fpt(char LSByte,char Mask,char Shift,char Data)
 {
-  if(LSByte != 201)
-    return 1;
-  ADCSRA = cal_msk_sht(ADCSRA,Mask,Shift,Data);
+  switch(LSByte)
+  {
+    // ADMUX
+    case 200:
+      ADMUX = cal_msk_sht(ADMUX,Mask,Shift,Data);
+      break;
+    // ADCSRA
+    case 201:
+      ADCSRA = cal_msk_sht(ADCSRA,Mask,Shift,Data);
+      break;
+    // DDRF
+    case 202:
+      if(DDRF & (~cal_msk_sht(ADMUX,Mask,Shift,Data)))
+      {
+        DDRF = cal_msk_sht(ADMUX,Mask,Shift,Data);
+        return 2;
+      }
+      DDRF = cal_msk_sht(ADMUX,Mask,Shift,Data);
+      break;
+    default:
+      return 1;
+      break;
+  }
   return 0;
 }
 
