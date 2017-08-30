@@ -1,5 +1,5 @@
 #include "ASA_Lib.h"
-#include "M128_ADC.h"
+#include ".\Lib\M128_ADC.h"
 
 int main(int argc, char const *argv[]) {
   char flag = 0,check;
