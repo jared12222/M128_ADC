@@ -47,15 +47,20 @@ char M128_ADC_set(char LSByte, char Mask, char Shift, char Data)
 */
 char M128_ADC_get(char LSByte, char Bytes, void *Data_p)
 {
-  volatile uint8_t *reg[2] = {&ADCL,&ADCH};
   int i;
   if(((LSByte == 100) && (Bytes > 2)) || ((LSByte == 101) && (Bytes > 1)))  //Bytes must not exceeds 2/1 when Read LSByte 100/101
     return 1;
-  for(i = 0;i < Bytes; i++)
+  switch(Bytes)
   {
-    *((char*)Data_p + i) = *reg[LSByte-100+i];
+      case 1:
+        *((char*)Data_p) = ADCH;
+      case 2:
+        *((char*)Data_p) = ADCL;
+        *((char*)Data_p+1) = ADCH;
+        break;
+
   }
-  if(((ADMUX & 0x20) && (Bytes != 2)) || ((!(ADMUX & 0x20)) && (Bytes != 1))) // IF ADLAR of ADMUX =1/0, then Bytes maybe 2/1
+  if(((ADMUX & 0x20) && (Bytes != 1)) || ((!(ADMUX & 0x20)) && (Bytes != 2))) // IF ADLAR of ADMUX =1/0, then Bytes maybe 2/1
     return 2;
   return 0;
 }
@@ -104,13 +109,12 @@ char M128_ADC_isr(char Number, void (*function)(void))
   {
     ADC_ISR_func[ADC_ISR_counter] = function;
     ADC_num [ADC_ISR_counter] = Number;
+    ADC_ISR_counter++;
   }
-  ADC_ISR_counter++;
 
   return 0;
 }
 //------------------------ADC Interrupt------------------
-
 volatile char i;
 ISR(ADC_vect)
 {
