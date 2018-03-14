@@ -55,6 +55,7 @@ help:
 	@-mkdir -p hex
 	@-mv $*.hex hex/
 	@-rm -rf $(OBJECTS) $*.map $*.o $<
+	@cmd_ASA_loader -p 5 -h .\hex\main.hex
 
 %.eep: %.elf
 	-avr-objcopy $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0
