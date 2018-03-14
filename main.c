@@ -9,14 +9,16 @@ volatile unsigned int data = 0;
 
 
 void INT_test(void)
+//ISR(ADC_vect)
 {
-    flag ++;
-    M128_ADC_get(100,2,(char*)&data);
+    flag = 1;
+    M128_ADC_get(100,2,&data);
 }
 
 
 int main(void) {
-  char flag = 0,check;
+  //char flag = 0;
+  char check;
   //char buff[2];
   unsigned int buff;
   rev_STDIO_set();
@@ -29,13 +31,13 @@ int main(void) {
   //check |= M128_ADC_set(202,0x0F,0,0); //Set ADC pins as input
 
   M128_ADC_isr(0,INT_test);
-  //check |= M128_ADC_set(201,0x08,3,1); //Enable ADC Interrupt
+  check |= M128_ADC_set(201,0x08,3,1); //Enable ADC Interrupt
   check |= M128_ADC_set(201,0x80,7,1); //Enable ADC
   printf("ADMUX : %.2X\r\n",ADMUX);
   printf("ADCSRA: %.2X\r\n",ADCSRA);
   if(check)
     printf("Debug point <3> check:%d\r\n",check);
-  //sei();
+  sei();
   /*
   ADMUX=(1<<REFS0);
   ADCSRA=(1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
@@ -48,29 +50,29 @@ int main(void) {
   {
     //-------------------------Check ADC interrupt
     //
-    // check = M128_ADC_fpt(201,0x40,6,1); // Start conversion
-    //
-    // while(!flag);
-    // printf("Success!\n");
-    // printf("Result:%d %d\n",flag,data);
+    check = M128_ADC_fpt(201,0x40,6,1); // Start conversion
+
+    while(!flag);
+    printf("Result:%d %.3X\r",flag,data);
+    flag = 0;
 
     //-------------------------Read after flag set to one
 
-    check = M128_ADC_fpt(201,0x40,6,1); // Start conversion
-
-    while(!flag)
-    {
-      check = M128_ADC_fgt(201,0x10,4,&flag);   // check ADC Interrupt flag
-      if(check)
-        printf("Debug point <1> check:%d\n",check);
-    }
-    //check = M128_ADC_get(100,2,buff);  //uint8_t buff[2]
-    check = M128_ADC_get(100,2,&buff);   //unsigned int
-    check = M128_ADC_fpt(201,0x10,4,1);   // Clear ADC Interrupt Flag
-    if(check)
-        printf("Debug point <2> check:%d\n",check);
-    //printf("Re:%.1X%.2X\r",buff[1],buff[0]);  //uint8_t buff[2]
-    printf("Re:%.3X\r",buff);    // unsigned int
+    // check = M128_ADC_fpt(201,0x40,6,1); // Start conversion
+    //
+    // while(!flag)
+    // {
+    //   check = M128_ADC_fgt(201,0x10,4,&flag);   // check ADC Interrupt flag
+    //   if(check)
+    //     printf("Debug point <1> check:%d\n",check);
+    // }
+    // //check = M128_ADC_get(100,2,buff);  //uint8_t buff[2]
+    // check = M128_ADC_get(100,2,&buff);   //unsigned int
+    // check = M128_ADC_fpt(201,0x10,4,1);   // Clear ADC Interrupt Flag
+    // if(check)
+    //     printf("Debug point <2> check:%d\n",check);
+    // //printf("Re:%.1X%.2X\r",buff[1],buff[0]);  //uint8_t buff[2]
+    // printf("Re:%.3X\r",buff);    // unsigned int
 
     //----------------------------- Direct Register
     // ADCSRA = (((ADCSRA) & (~(0x40)))|(((1)<<6)&(0x40)));
