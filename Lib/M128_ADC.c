@@ -47,7 +47,6 @@ char M128_ADC_set(char LSByte, char Mask, char Shift, char Data)
 */
 char M128_ADC_get(char LSByte, char Bytes, void *Data_p)
 {
-  int i;
   if(((LSByte == 100) && (Bytes > 2)) || ((LSByte == 101) && (Bytes > 1)))  //Bytes must not exceeds 2/1 when Read LSByte 100/101
     return 1;
   switch(Bytes)
@@ -118,9 +117,9 @@ char M128_ADC_isr(char Number, void (*function)(void))
 volatile char i;
 ISR(ADC_vect)
 {
-  for(i = 0;i <= ADC_ISR_counter;i++)
-  {
-    if((ADC_ISR_func[(int)i]!=0) && (ADC_num[(int)i] == 0))
-      ADC_ISR_func[(int)i]();
-  }
+   for(i = 0;i <= ADC_ISR_counter;i++)
+   {
+     if((ADC_ISR_func[(int)i]!=0) && (ADC_num[(int)i] == 0))
+       ADC_ISR_func[(int)i]();
+   }
 }
