@@ -1,7 +1,7 @@
 /*===============ASA Series Library===============*/
 
 /*****ReleaseDate*****/
-//2017/8/14
+//2018/--/--
 
 /*****Feature*****/
 
@@ -50,10 +50,17 @@ char HMI_Transceiver_get(char Bytes, void *Data_p);
 char HMI_Structure_put(char *FormatString, char Bytes, void *Data_p);
 char HMI_Structure_get(char *FormatString, char Bytes, void *Data_p);
 
+
 char M128_AComp_set(char LSByte, char Mask, char Shift, char Data);
 char M128_AComp_fpt(char LSByte, char Mask, char Shift, char Data);
 char M128_AComp_fgt(char LSByte, char Mask, char Shift, void *Data_p);
 char M128_Acomp_isr(char Number, void (*function)(void));
+
+char M128_ADC_set(char LSByte, char Mask, char Shift, char Data);
+char M128_ADC_get(char LSByte, char Bytes, void *Data_p);
+char M128_ADC_fpt(char LSByte,char Mask,char Shift,char Data);
+char M128_ADC_fgt(char LSByte,char Mask,char Shift,char *Data_p);
+char M128_ADC_isr(char Number, void (*function)(void));
 
 char M128_DIO_set(char LSByte, char Mask, char Shift, char Data);
 char M128_DIO_put(char LSByte, char Bytes, void *Data_p);
@@ -66,23 +73,53 @@ char M128_EXT_fpt(char LSByte, char Mask, char Shift, char Data);
 char M128_EXT_fgt(char LSByte, char Mask, char Shift, void *Data_p);
 char M128_EXT_isr(char Number, void (*function)(void));
 
+char M128_HMI_set(char LSBytes, char Mask, char shift, char Data);
+char M128_HMI_put(char Bytes, char Type, void *Data_p);
+char M128_HMI_get(char Bytes, void *Data_p);
+char M128_HMI_Form_put(char *FormatString, char Bytes, void *Data_p);
+char M128_HMI_Form_get(char *FormatString, char Bytes, void *Data_p);
+
+char M128_PWM_set(char LSByte, char Mask, char Shift, char Data);
+char M128_PWM_fpt( char LSByte, char Mask,  char Shift, char Data);
+char M128_PWM_put(char LSByte, char Bytes, void *Data_p);
+char M128_PWM_fgt( char LSByte, char Mask,  char Shift, void *Data_p);
+char M128_PWM_isr(char number,char cycle,char phase, void (*function)(void));
+
+char M128_SPI_set(char LSByte,char Mask,char Shift,char Data);
+char M128_SPI_put(char LSByte,char Bytes,char *Data_p);
+char M128_SPI_get(char LSByte,char Bytes,char *Data_p);
+char M128_SPI_fpt(char LSByte,char Mask,char Shift,char Data);
+char M128_SPI_fgt(char LSByte,char Mask,char Shift,char *Data_p);
+char M128_SPI_swap(char Data);
+char M128_SPI_trm(char OneReg,char RegAdd,char Bytes,void *Data_p);
+char M128_SPI_rec(char OneReg,char RegAdd,char Bytes,void *Data_p);
+char M128_SPI_frc(char OneReg,char RegAdd,char Mask,char Shift,char *Data_p);
+char M128_SPI_ftm(char OneReg,char RegAdd,char Mask,char Shift,char *Data_p);
+
 char M128_TIM_set(char Lsbyte, char Mask, char Shift, char Data);
 char M128_TIM_put(char LSbyte, char Bytes, void *Data_p);
 char M128_TIM_get(char LSByte, char Bytes, void *Data_p);
 char M128_TIM_fpt(char Lsbyte, char Mask, char Shift, char Data);
-char M128_TIM_isr(char Number,  void (*function)(void));
+char M128_TIM_isr(char Number,char Cycle,char Phase, void (*function)(void));
 char M128_TIM_isr_remove(char Number,  void (*function)(void));
 
-char ASA_UART_set(char ASAID, char ID, char LSByte, char Mask, char Shift, char Data);
-char ASA_UART_put(char ASAID, char ID, char LSByte, char Bytes, void *Data_p);
-char ASA_UART_get(char ASAID, char ID, char LSByte, char Bytes, void *Data_p);
-char ASA_UART_fpt(char ASAID, char ID, char LSByte, char Mask, char Shift, char Data);
-char ASA_UART_fgt(char ASAID, char ID, char LSByte, char Mask, char Shift, char *Data);
-char ASA_RS485_set(char ASAID, char ID, char LSByte, char Mask, char Shift, char Data);
-char ASA_RS485_put(char ASAID, char ID, char LSByte, char Bytes, void *Data_p);
-char ASA_RS485_get(char ASAID, char ID, char LSByte, char Bytes, void *Data_p);
-char ASA_RS485_fpt(char ASAID, char ID, char LSByte, char Mask, char Shift, char Data);
-char ASA_RS485_fgt(char ASAID, char ID, char LSByte, char Mask, char Shift, char *Data);
+char M128_TWI_set(char LSByte, char Mask,  char shift,char Data);
+char M128_TWI_put(char LSByte, char Bytes, char *Data_p);
+char M128_TWI_get(char LSByte, char Bytes, char *Data_p);
+char M128_TWI_fpt( char LSByte, char Mask,  char shift, char Data);
+char M128_TWI_fgt( char LSByte, char Mask,  char shift,  char *Data_p);
+char M128_TWIM_trm(char OneReg, char TWIID, char RegAdd, char Bytes, void *Data_p);
+char M128_TWIM_rec(char OneReg, char TWIID, char RegAdd, char Bytes, void *Data_p);
+char M128_TWIM_ftm(char SLA,char OneReg, char RegAdd, char Mask, char shift, void *Data_p);
+char M128_TWIM_frc(char SLA,char OneReg, char RegAdd, char Mask, char shift, char *Data_p);
+
+char M128_UART_set( char LSbyte, char Mask, char Shift, void* Data_p);
+char M128_UART_put( char LSbyte, char Bytes, void *Data_p);
+char M128_UART_get( char LSbyte, char Bytes, void *Data_p);
+char M128_UARTM_trm(char OneSLA, char OneReg, char UARTID, char RegAdd, char Bytes, void *Data_p);
+char M128_UARTM_rec(char OneSLA, char OneReg, char UARTID, char RegAdd, char Bytes, void *Data_p);
+char M128_UARTM_ftm(char OneSLA, char OneReg, char UARTID, char RegAdd, char Mask,  char shift, char* Data_p);
+char M128_UARTM_frc(char OneSLA, char OneReg, char UARTID, char RegAdd, char Mask,  char shift, char* Data_p);
 
 /**7S00**/
 char ASA_7S00_set(char ASA_ID, char LSByte, char Mask, char shift, char Data);
